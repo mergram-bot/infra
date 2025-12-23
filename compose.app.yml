@@ -1,0 +1,33 @@
+services:
+  bot:
+    image: ghcr.io/capcom6/mergram-tg-bot:latest
+    environment:
+      - TZ=${TIMEZONE:-UTC}
+      - HTTP__ADDRESS=:3000
+      - TELEGRAM__TOKEN=${BOT__TELEGRAM__TOKEN}
+      - RENDERER__TIMEOUT=${BOT__RENDERER__TIMEOUT:-3s}
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      resources:
+        reservations:
+          memory: 32M
+        limits:
+          memory: 64M
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      update_config:
+        order: stop-first
+        monitor: 15s
+        failure_action: rollback
+      rollback_config:
+        order: stop-first
+        monitor: 15s
+
+networks:
+  internal:
+    external: true
+  public:
+    external: true
