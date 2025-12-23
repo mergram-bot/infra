@@ -1,28 +1,28 @@
 services:
-#   redis:
-#     image: redis:7
-#     environment:
-#       - "TZ=${TIMEZONE:-UTC}"
-#     volumes:
-#       - redis-data:/data
-#     healthcheck:
-#       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-#       interval: 1s
-#       timeout: 3s
-#       retries: 5
-#     networks:
-#       - internal
-#     deploy:
-#       mode: replicated
-#       replicas: 1
-#       resources:
-#         reservations:
-#           memory: 16M
-#         limits:
-#           memory: 128M
-#       placement:
-#         constraints:
-#           - node.role == manager
+  valkey:
+    image: valkey/valkey:8-alpine
+    environment:
+      - "TZ=${TIMEZONE:-UTC}"
+    volumes:
+      - valkey-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    networks:
+      - internal
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        reservations:
+          memory: 16M
+        limits:
+          memory: 128M
+      placement:
+        constraints:
+          - node.role == manager
 
 #   db:
 #     image: mariadb:lts
@@ -185,8 +185,8 @@ services:
 #         constraints:
 #           - node.role == manager
 
-# volumes:
-#   redis-data:
+volumes:
+  valkey-data:
 #   mariadb-data:
 #   letsencrypt:
 
